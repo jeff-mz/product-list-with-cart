@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@theme {
+  --color-red: #b73215; /* Custom Red */
+  --color-green: #228b60; /* Custom Green */
+  --color-rose-50: #fef5f3; /* Rose 50 */
+  --color-rose-100: #f7e8e5; /* Rose 100 */
+  --color-rose-300: #d1ada7; /* Rose 300 */
+  --color-rose-400: #ad8883; /* Rose 400 */
+  --color-rose-500: #7b5c58; /* Rose 500 */
+  --color-rose-900: #1e0e0c; /* Rose 900 */
+}
+* {
+  font-family: "Red Hat Text", serif;
+}
+/* Container for the des
+
+Responsive margin-bottom adjustments for every 100px
+
+@media (max-width: 375px) {
+  .dessert-button {
+    margin-top: -3rem;
+  }
+}
+@media (max-width: 320px) {
+  .dessert-button {
+    margin-top: -100px;
+  }
+}
+
+@media (min-width: 425px) {
+  .dessert-button {
+    margin-top: -2rem;
+  }
+}
+
+@media (min-width: 426px) and (max-width: 768px) {
+  .dessert-button {
+    margin-top: -1rem;
+  }
+}
+
+@media (min-width: 600px) {
+  .dessert-button {
+    margin-top: 6px;
+  }
+}
+
+@media (min-width: 700px) {
+  .dessert-button {
+    margin-top: 4px;
+  }
+}
+
+@media (min-width: 800px) {
+  .dessert-button {
+    margin-top: 2px;
+  }
+}
+
+@media (min-width: 900px) {
+  .dessert-button {
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 1000px) {
+  .dessert-button {
+    margin-top: -2px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .dessert-button {
+    margin-top: -4px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .dessert-button {
+    margin-top: -6px;
+  }
+}
