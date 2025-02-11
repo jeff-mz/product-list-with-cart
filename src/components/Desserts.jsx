@@ -4,26 +4,27 @@ import cake from "../assets/images/illustration-empty-cart.svg";
 import increaseIcon from "../assets/images/icon-increment-quantity.svg";
 import decreaseIcon from "../assets/images/icon-decrement-quantity.svg";
 import removeIcon from "../assets/images/icon-remove-item.svg";
+import checkIcon from "../assets/images/icon-order-confirmed.svg";
 
 function Desserts() {
   const [desserts, setDessert] = useState([]);
-  const [order, setOrder] = useState([]);
-
+  const [orders, setOrders] = useState([]);
+  const [checkout, setChehkout] = useState(false);
   useEffect(() => {
     setDessert(data);
   }, []);
 
   const addToCart = (dessert) => {
-    const existingItem = order.find((item) => item.name === dessert.name);
+    const existingItem = orders.find((item) => item.name === dessert.name);
     if (existingItem) {
       increaseQuantity(dessert.name);
     } else {
-      setOrder((prevOrder) => [...prevOrder, { ...dessert, quantity: 1 }]);
+      setOrders((prevOrder) => [...prevOrder, { ...dessert, quantity: 1 }]);
     }
   };
 
   const increaseQuantity = (dessertName) => {
-    setOrder((prevOrder) =>
+    setOrders((prevOrder) =>
       prevOrder.map((item) =>
         item.name === dessertName
           ? { ...item, quantity: item.quantity + 1 }
@@ -33,7 +34,7 @@ function Desserts() {
   };
 
   const decreaseQuantity = (dessertName) => {
-    setOrder(
+    setOrders(
       (prevOrder) =>
         prevOrder
           .map((item) =>
@@ -46,13 +47,16 @@ function Desserts() {
   };
 
   const removeFromCart = (dessertName) => {
-    setOrder((prevOrder) =>
+    setOrders((prevOrder) =>
       prevOrder.filter((item) => item.name !== dessertName)
     );
   };
 
   const calculateTotal = () => {
-    return order.reduce((total, item) => total + item.price * item.quantity, 0);
+    return orders.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
   };
 
   return (
@@ -95,11 +99,11 @@ function Desserts() {
                     </a>
                     <div
                       className={`flex flex-row items-center justify-center w-[200px] md:w-[150px] mx-auto ${
-                        order.some((item) => item.name === dessert.name)
+                        orders.some((item) => item.name === dessert.name)
                           ? "bg-red"
                           : "bg-white"
                       } px-5 py-2.5 text-center text-sm md:text-xs font-semibold hover:text-red hover:border-red hover:border-2 border-2 ${
-                        order.some((item) => item.name === dessert.name)
+                        orders.some((item) => item.name === dessert.name)
                           ? "border-red"
                           : "border-rose-500"
                       } dessert-button absolute`}
@@ -114,7 +118,7 @@ function Desserts() {
                         transform: "translateX(-50%)",
                       }}
                     >
-                      {order.some((item) => item.name === dessert.name) ? (
+                      {orders.some((item) => item.name === dessert.name) ? (
                         <div className="w-full flex justify-between items-center text-white text-sm">
                           <img
                             src={decreaseIcon}
@@ -123,7 +127,7 @@ function Desserts() {
                             className="cursor-pointer"
                           />
                           <span>
-                            {order.find((item) => item.name === dessert.name)
+                            {orders.find((item) => item.name === dessert.name)
                               ?.quantity || 1}
                           </span>
                           <img
@@ -178,11 +182,11 @@ function Desserts() {
       </section>
       <section className="w-full md:w-1/4 bg-white rounded-xl p-5">
         <p className="text-red text-md md:text-xl lg:text-2xl font-bold">
-          Your Cart ({order.length})
+          Your Cart ({orders.length})
         </p>
-        {order.length > 0 ? (
+        {orders.length > 0 ? (
           <div>
-            {order.map((item) => (
+            {orders.map((item) => (
               <div key={item.name} className="my-2">
                 <p className="font-bold text-[18px] my-1">{item.name}</p>
                 <p className="flex items-center justify-between">
@@ -209,15 +213,76 @@ function Desserts() {
                 </p>
               </div>
             ))}
-            <div className="mt-4 border-t border-rose-400 pt-2">
-              <p className="text-red font-bold text-lg">
-                Total: ${calculateTotal()}
-              </p>
+            <div className="mt-4 border-t border-rose-400 pt-2 flex items-center justify-between">
+              <p className="text-red font-bold text-lg">Total:</p>
+              <p className="text-red font-bold text-lg">${calculateTotal()}</p>
             </div>
+            <button
+              className="text-white bg-red border-0 w-full  p-2 my-2 rounded-full cursor-pointer font-medium"
+              onClick={() => {
+                setChehkout(true);
+              }}
+            >
+              Confirm Order{" "}
+            </button>
           </div>
         ) : (
           <img src={cake} alt="a piece of cake" />
         )}
+      </section>
+
+      {/* checkout  */}
+      <section
+        className={`${
+          checkout ? "block" : "hidden"
+        } checkout-section flex items-center justify-center`}
+      >
+        <div className="checkout-div mx-auto bg-rose-100 p-5 rounded-sm">
+          <img src={checkIcon} alt="check mark" />
+          <p className="mt-2 mb-1 h1 font-bold text-3xl text-rose-900">
+            Order Confirmed
+          </p>
+          <p className="mb-2 text-rose-300 text-sm">
+            We hope you enjoy your food{" "}
+          </p>
+          {orders.map((item) => (
+            <div
+              key={item.name}
+              className="my-2 flex items-start bg-rose-50 rounded-sm "
+            >
+              <img
+                src={item.image.thumbnail}
+                alt="tasty cake"
+                className="w-[50px] h-[50px] inline rounded-sm mr-4"
+              />
+              <div className="inline ">
+                <p className="font-bold text-[18px] my-1">{item.name}</p>
+                <p className="flex items-center justify-baseline">
+                  <span className="text-red text-sm">{item.quantity}x</span>
+                  <span className="text-rose-400 text-sm mx-8">
+                    @ ${item.price}
+                  </span>
+                  <span className="text-red font-bold">
+                    ${item.price * item.quantity}
+                  </span>
+                </p>
+              </div>
+            </div>
+          ))}
+          <div className="mt-4 pt-2 flex items-center justify-between">
+            <p className="text-red font-bold text-lg">Total:</p>
+            <p className="text-red font-bold text-lg">${calculateTotal()}</p>
+          </div>
+          <button
+            className="text-white bg-red border-0 w-full  p-2 my-2 rounded-full cursor-pointer font-medium"
+            onClick={() => {
+              setChehkout(false);
+              setOrders([]);
+            }}
+          >
+            Start new order
+          </button>
+        </div>
       </section>
     </div>
   );
